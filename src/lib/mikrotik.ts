@@ -83,6 +83,18 @@ export class MikrotikAPI {
     }
   }
 
+  async getUsers() {
+    try {
+      await this.connect();
+      const users = await this.api.write('/tool/user-manager/user/print');
+      await this.disconnect();
+      return users;
+    } catch (error) {
+      console.error('Error getting user active', error) ;
+      await this.disconnect();
+      throw error;
+    }
+  }
 
   async terminateSession(id: string) {
     try {
