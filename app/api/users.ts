@@ -6,14 +6,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     if (req.method === 'GET') {
-      const sessions = await mikrotik.getActiveSessions();
-      res.status(200).json(sessions);
-    } else if (req.method === 'DELETE') {
-      const { id } = req.query;
-      await mikrotik.terminateSession(id as string);
-      res.status(200).json({ success: true });
+      const users = await mikrotik.getUsers();
+      res.status(200).json(users);
+    } else if (req.method === 'POST') {
+      const { username, password, profile } = req.body;
+      await mikrotik.createUserSession(username, password, profile);
+      res.status(201).json({ success: true });
     } else {
-      res.setHeader('Allow', ['GET', 'DELETE']);
+      res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
     }
   } catch (error) {
